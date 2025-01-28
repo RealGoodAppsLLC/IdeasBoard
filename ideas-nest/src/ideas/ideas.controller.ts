@@ -38,11 +38,8 @@ export class IdeasController {
     return await this.ideasService.getIdea(id);
   }
 
-  async getIdeas(
-    @Param('id') id: string,
-    @Param('cursor') cursor: string,
-    @Req() req: unknown,
-  ) {
+  @Get(':cursor')
+  async getIdeas(@Param('cursor') cursor: string) {
     return await this.ideasService.getIdeas({ cursor });
   }
 }
