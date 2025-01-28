@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import {parseBody} from "./parse-body";
+import { parseBody } from './parse-body';
 
 export const getUserFromRequest = (req: unknown) => {
   const requestSchema = z.object({

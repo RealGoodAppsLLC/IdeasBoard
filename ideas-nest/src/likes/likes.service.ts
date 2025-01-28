@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { FirebaseAdminService } from '../firebase-admin/firebase-admin.service';
-import { LikeDbItem } from '../likes/likes.models';
+import { LikeDbItem } from './likes.models';
 
 @Injectable()
 export class LikesService {
