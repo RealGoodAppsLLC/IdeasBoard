@@ -1,17 +1,15 @@
 import { Controller, Param, Post, Req, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { LikesService } from './likes.service';
-import { getUserFromRequest } from '../utils/get-user-from-request';
+import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
+import AppRequest from '../utils/app-request';
 
 @Controller('ideas/{ideaId}/likes')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(FirebaseAuthGuard)
 export class LikesController {
   constructor(private readonly likesService: LikesService) {}
 
   @Post()
-  async likeIdea(@Param('ideaId') ideaId: string, @Req() req: unknown) {
-    const userId = getUserFromRequest(req);
-    await this.likesService.likeIdea({ ideaId, userId });
-    return {};
+  async likeIdea(@Param('ideaId') ideaId: string, @Req() req: AppRequest) {
+    await this.likesService.likeIdea({ ideaId, userId: req.user!.sub });
   }
 }

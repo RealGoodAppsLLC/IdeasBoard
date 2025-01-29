@@ -11,35 +11,38 @@ import {
 import { IdeasService } from './ideas.service';
 import { parseBody } from '../utils/parse-body';
 import { CreateIdeaDto, UpdateIdeaDto } from './ideas.models';
-import { AuthGuard } from '@nestjs/passport';
-import { getUserFromRequest } from '../utils/get-user-from-request';
+import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
+import AppRequest from '../utils/app-request';
 
 @Controller('ideas')
 export class IdeasController {
   constructor(private readonly ideasService: IdeasService) {}
 
   @Post()
-  @UseGuards(AuthGuard('jwt'))
-  async createIdea(@Body() body: unknown, @Req() req: unknown) {
+  @UseGuards(FirebaseAuthGuard)
+  async createIdea(@Body() body: unknown, @Req() req: AppRequest) {
     const createIdeaDto = parseBody(body, CreateIdeaDto);
-    const userId = getUserFromRequest(req);
-    return await this.ideasService.createIdea({ userId, createIdeaDto });
+    return this.ideasService.createIdea({
+      userId: req.user!.sub,
+      createIdeaDto,
+    });
   }
 
   @Put(':id')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(FirebaseAuthGuard)
   async updateIdea(@Param('id') id: string, @Body() body: unknown) {
+    // todo: We need to introduce a concept of ownership for ideas. Another user should not be able to update another idea.
     const updateIdeaDto = parseBody(body, UpdateIdeaDto);
-    return await this.ideasService.updateIdea({ id, updateIdeaDto });
+    return this.ideasService.updateIdea({ id, updateIdeaDto });
   }
 
   @Get(':id')
   async getIdea(@Param('id') id: string) {
-    return await this.ideasService.getIdea(id);
+    return this.ideasService.getIdea(id);
   }
 
   @Get(':cursor')
   async getIdeas(@Param('cursor') cursor: string) {
-    return await this.ideasService.getIdeas({ cursor });
+    return this.ideasService.getIdeas({ cursor });
   }
 }
