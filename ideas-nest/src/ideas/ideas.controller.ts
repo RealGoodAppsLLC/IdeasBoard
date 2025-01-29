@@ -45,4 +45,9 @@ export class IdeasController {
   async getIdeas(@Param('cursor') cursor: string) {
     return this.ideasService.getIdeas({ cursor });
   }
+
+  @Get()
+  async getIdeas2() {
+    return this.ideasService.getIdeas({});
+  }
 }
