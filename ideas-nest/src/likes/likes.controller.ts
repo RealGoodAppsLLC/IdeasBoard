@@ -3,7 +3,7 @@ import { LikesService } from './likes.service';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
 import AppRequest from '../utils/app-request';
 
-@Controller('ideas/{ideaId}/likes')
+@Controller('ideas/:ideaId/likes')
 @UseGuards(FirebaseAuthGuard)
 export class LikesController {
   constructor(private readonly likesService: LikesService) {}

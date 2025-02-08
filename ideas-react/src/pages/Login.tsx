@@ -17,12 +17,14 @@ import {
 } from "@mui/material";
 import { Google } from "@mui/icons-material";
 import { auth } from '../config/firebase.ts';
+import { useNavigate } from 'react-router';
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const googleProvider = new GoogleAuthProvider();
 
@@ -83,58 +85,85 @@ const Login = () => {
   }, []);
 
   return (
-    <Container maxWidth="sm">
-      <Paper elevation={3} sx={{ padding: 4, marginTop: 5 }}>
-        <Typography variant="h5" align="center" gutterBottom>
-          Log In
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        bgcolor: "background.default",
+      }}
+    >
+      <Container maxWidth="sm">
+        <Typography variant="h1" align="center" gutterBottom>
+          Ideas Board
         </Typography>
 
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
+        <Paper elevation={3} sx={{ padding: 4, marginTop: 5 }}>
+          <Typography variant="h5" align="center" gutterBottom>
+            Log In
+          </Typography>
 
-        <form onSubmit={handleLogin}>
-          <Box display="flex" flexDirection="column" gap={2}>
-            <TextField
-              label="Email"
-              type="email"
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+
+          <form onSubmit={handleLogin}>
+            <Box display="flex" flexDirection="column" gap={2}>
+              <TextField
+                label="Email"
+                type="email"
+                variant="outlined"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                fullWidth
+                required
+              />
+              <TextField
+                label="Password"
+                type="password"
+                variant="outlined"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                fullWidth
+                required
+              />
+              <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading}>
+                {loading ? <CircularProgress size={24} /> : "Log In"}
+              </Button>
+            </Box>
+          </form>
+
+          <Box mt={2}>
+            <Button
               variant="outlined"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              color="primary"
               fullWidth
-              required
-            />
-            <TextField
-              label="Password"
-              type="password"
+              onClick={handleGoogleLogin}
+              startIcon={<Google />}
+              disabled={loading}
+            >
+              {loading ? <CircularProgress size={24} /> : "Sign in with Google"}
+            </Button>
+
+            <Typography variant="body2" sx={{ mt: 2 }}>
+              Don't have an account?{" "}
+            </Typography>
+            <Button
               variant="outlined"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              color="secondary"
               fullWidth
-              required
-            />
-            <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading}>
-              {loading ? <CircularProgress size={24} /> : "Log In"}
+              sx={{ mt: 1 }}
+              onClick={() => navigate("/signup")}
+            >
+              Sign Up
             </Button>
           </Box>
-        </form>
-
-        <Box mt={2}>
-          <Button
-            variant="outlined"
-            color="primary"
-            fullWidth
-            onClick={handleGoogleLogin}
-            startIcon={<Google />}
-            disabled={loading}
-          >
-            {loading ? <CircularProgress size={24} /> : "Sign in with Google"}
-          </Button>
-        </Box>
-      </Paper>
-    </Container>
+        </Paper>
+      </Container>
+    </Box>
   );
 };
 

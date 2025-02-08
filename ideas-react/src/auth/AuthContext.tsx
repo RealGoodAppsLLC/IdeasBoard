@@ -3,8 +3,10 @@ import { createContext } from 'react';
 
 interface AuthContextType {
   user: User | null;
-  fetchAuthed: (url: string, config: RequestInit) => Promise<Response | null>;
+  fetchAuthed: (url: string, config?: RequestInit) => Promise<Response | null>;
   loading: boolean;
+  signup: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -13,5 +15,11 @@ export const AuthContext = createContext<AuthContextType>({
   fetchAuthed: () => {
     return Promise.resolve(null);
   },
+  signup: () => {
+    return Promise.resolve();
+  },
+  logout: () => {
+    return Promise.resolve();
+  }
 });
 

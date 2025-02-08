@@ -1,12 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router";
 import Login from "../pages/Login";
-import Dashboard from "../pages/Dashboard";
-import { useAuth } from '../auth/UseAuth.tsx';
+import { useAuth } from "../auth/UseAuth.tsx";
+import { AppLayout } from '../AppLayout';
+import Signup from "../pages/Signup.tsx";
+import Ideas from '../pages/Ideas.tsx';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
-  return user ? <>{children}</> : <Navigate to="/login" replace />;
+  return user ? <AppLayout>{children}</AppLayout> : <Navigate to="/login" replace />;
 };
 
 const AppRouter = () => {
@@ -15,9 +17,10 @@ const AppRouter = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={user ? <Navigate to="/dashboard" replace /> : <Login />} />
-        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-        <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
+        <Route path="/login" element={user ? <Navigate to="/ideas" replace /> : <Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/ideas" element={<PrivateRoute><Ideas /></PrivateRoute>} />
+        <Route path="*" element={<Navigate to={user ? "/ideas" : "/login"} />} />
       </Routes>
     </Router>
   );

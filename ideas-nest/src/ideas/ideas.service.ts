@@ -23,8 +23,8 @@ export class IdeasService {
     const ideaDbItem: IdeaDbItem = {
       ...createIdeaDto,
       userId,
-      timestampCreated: new Date(),
-      timestampUpdated: new Date(),
+      timestampCreated: new Date().getTime(),
+      timestampUpdated: new Date().getTime(),
     };
     await ideaRef.set(ideaDbItem);
     return { id: ideaRef.id, ...ideaDbItem, likes: 0 };
@@ -45,7 +45,7 @@ export class IdeasService {
     const newItem: IdeaDbItem = {
       ...existingItem,
       ...updateIdeaDto,
-      timestampUpdated: new Date(),
+      timestampUpdated: new Date().getTime(),
     };
     await ideaRef.update(newItem);
   }

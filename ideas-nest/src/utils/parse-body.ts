@@ -9,7 +9,6 @@ export const parseBody = <TBody>(
   schema: ZodParsable<unknown, TBody>,
 ) => {
   const parseResult = schema.safeParse(body);
-
   if (!parseResult.success) {
     throw new Error(parseResult.error.errors.map((e) => e.message).join(', '));
   }
